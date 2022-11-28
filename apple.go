@@ -33,7 +33,7 @@ func renderApples(renderer *sdl.Renderer) {
 	for _, v := range apples {
 		err := renderer.SetDrawColor(48, 53, 48, 255)
 		if err != nil {
-			return
+			panic(err.Error())
 		}
 		err = renderer.FillRect(&sdl.Rect{
 			X: v.X,

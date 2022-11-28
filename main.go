@@ -15,11 +15,11 @@ func loadAppleImage() {
 func clearRenderer() {
 	err := renderer.SetDrawColor(0, 0, 0, 255)
 	if err != nil {
-		return
+		panic(err.Error())
 	}
 	err = renderer.Clear()
 	if err != nil {
-		return
+		panic(err.Error())
 	}
 }
 
@@ -29,6 +29,7 @@ drawBackground: draws the background image onto the screen
 func drawBackground() {
 	err := renderer.SetDrawColor(48, 53, 48, 255)
 	if err != nil {
+		fmt.Println(err.Error())
 		return
 	}
 	err = renderer.FillRect(&sdl.Rect{
@@ -38,7 +39,7 @@ func drawBackground() {
 		H: windowSize},
 	)
 	if err != nil {
-		return
+		panic(err.Error())
 	}
 	/*err = renderer.Copy(
 		backgroundTexture,
@@ -71,7 +72,7 @@ func run() int {
 	/*
 		Create Window
 	*/
-	window, _ = sdl.CreateWindow(
+	window, err := sdl.CreateWindow(
 		"Go, Snake!",
 		sdl.WINDOWPOS_UNDEFINED,
 		sdl.WINDOWPOS_UNDEFINED,
@@ -79,22 +80,29 @@ func run() int {
 		windowSize,
 		sdl.WINDOW_SHOWN,
 	)
+	if err != nil {
+		panic(err.Error())
+	}
 
 	defer func(window *sdl.Window) {
 		err := window.Destroy()
 		if err != nil {
-
+			fmt.Println(err.Error())
 		}
 	}(window)
 
 	/*
 		Create Renderer
 	*/
-	renderer, _ = sdl.CreateRenderer(window, -1, sdl.RENDERER_ACCELERATED)
+	renderer, err = sdl.CreateRenderer(window, -1, sdl.RENDERER_ACCELERATED)
+	if err != nil {
+		panic(err.Error())
+	}
+
 	defer func(renderer *sdl.Renderer) {
 		err := renderer.Destroy()
 		if err != nil {
-
+			fmt.Println(err.Error())
 		}
 	}(renderer)
 
@@ -105,7 +113,7 @@ func run() int {
 	defer func(appleTexture *sdl.Texture) {
 		err := appleTexture.Destroy()
 		if err != nil {
-
+			fmt.Println(err.Error())
 		}
 	}(appleTexture)
 
