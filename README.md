@@ -8,4 +8,4 @@ Run
 ```go
 go build
 ```
-to build a binary. Ensure that the assets folder is on the same level as the binary!
+to build a binary. Ensure that the assets folder is on the same level/same directory as the binary!
