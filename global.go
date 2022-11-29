@@ -8,7 +8,7 @@ const (
 	blockSize        = 20
 	applePath        = "./assets/apple.png"
 	snakeStartLength = 6
-	appleCount       = 10
+	appleCount       = 5
 	north            = 0
 	east             = 1
 	south            = 2
