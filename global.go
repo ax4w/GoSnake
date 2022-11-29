@@ -23,7 +23,7 @@ var (
 	appleTexture *sdl.Texture
 	running      = true
 	apples       = make([]*apple, 0, appleCount)
-	delay        = uint32(30)
+	delay        = uint32(55)
 )
 
 // all used global types

@@ -27,7 +27,7 @@ func hasSnakeHitItSelf() bool {
 func handleAppleHit() {
 	for _, v := range apples {
 		if head().X >= v.X-blockSize && head().X <= v.X+blockSize &&
-			head().Y >= v.Y-blockSize/2 && head().Y <= v.Y+blockSize {
+			head().Y >= v.Y-blockSize && head().Y <= v.Y+blockSize {
 			snake = append(snake, &snakeChunk{
 				X: snake[len(snake)-1].X,
 				Y: snake[len(snake)-1].Y,
@@ -85,13 +85,13 @@ func moveSnake() {
 		if i == 0 {
 			switch head().direction {
 			case north:
-				head().Y -= blockSize / 2
+				head().Y -= blockSize
 			case south:
-				head().Y += blockSize / 2
+				head().Y += blockSize
 			case east:
-				head().X += blockSize / 2
+				head().X += blockSize
 			case west:
-				head().X -= blockSize / 2
+				head().X -= blockSize
 			}
 			continue
 		}

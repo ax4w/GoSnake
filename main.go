@@ -137,11 +137,15 @@ func run() int {
 				running = false
 			}
 		}
-		t := <-snakeLen
-		window.SetTitle(
-			fmt.Sprintf("Go,Snake! Score: %d", t-snakeStartLength),
-		)
-		sdl.Delay(delay)
+		select {
+		case t := <-snakeLen:
+			window.SetTitle(
+				fmt.Sprintf("Go,Snake! Score: %d", t-snakeStartLength),
+			)
+		default:
+
+		}
+		//sdl.Delay(delay)
 	}
 
 	return 0
