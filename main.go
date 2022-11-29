@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"github.com/veandco/go-sdl2/img"
 	"github.com/veandco/go-sdl2/sdl"
+	"math/rand"
 	"os"
+	"time"
 )
 
 func loadAppleImage() {
@@ -69,6 +71,7 @@ func draw(snakeLen chan int) {
 }
 
 func run() int {
+	rand.Seed(time.Now().UnixNano())
 	/*
 		Create Window
 	*/
@@ -87,7 +90,7 @@ func run() int {
 	defer func(window *sdl.Window) {
 		err := window.Destroy()
 		if err != nil {
-			fmt.Println(err.Error())
+			//fmt.Println(err.Error())
 		}
 	}(window)
 
@@ -102,7 +105,7 @@ func run() int {
 	defer func(renderer *sdl.Renderer) {
 		err := renderer.Destroy()
 		if err != nil {
-			fmt.Println(err.Error())
+			//fmt.Println(err.Error())
 		}
 	}(renderer)
 
@@ -131,7 +134,6 @@ func run() int {
 				}
 
 			case *sdl.QuitEvent:
-				close(snakeLen)
 				running = false
 			}
 		}
