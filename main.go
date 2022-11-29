@@ -57,17 +57,18 @@ func draw(snakeLen chan int) {
 			running = false
 			break
 		}
-		handleAppleHit()
-		clearRenderer()
-		drawBackground()
-		renderApples(renderer)
-		renderSnake(renderer)
-		moveSnake()
-		renderer.Present()
-		snakeLen <- len(snake)
-		sdl.Delay(delay)
+		sdl.Do(func() {
+			handleAppleHit()
+			clearRenderer()
+			drawBackground()
+			renderApples(renderer)
+			renderSnake(renderer)
+			moveSnake()
+			renderer.Present()
+			snakeLen <- len(snake)
+			sdl.Delay(delay)
+		})
 	}
-
 }
 
 func run() int {
@@ -75,50 +76,52 @@ func run() int {
 	/*
 		Create Window
 	*/
-	window, err := sdl.CreateWindow(
-		"Go, Snake!",
-		sdl.WINDOWPOS_UNDEFINED,
-		sdl.WINDOWPOS_UNDEFINED,
-		windowSize,
-		windowSize,
-		sdl.WINDOW_SHOWN,
-	)
+	var err error
+	sdl.Do(func() {
+		window, err = sdl.CreateWindow(
+			"Go, Snake!",
+			sdl.WINDOWPOS_UNDEFINED,
+			sdl.WINDOWPOS_UNDEFINED,
+			windowSize,
+			windowSize,
+			sdl.WINDOW_SHOWN,
+		)
+	})
+
 	if err != nil {
 		panic(err.Error())
 	}
 
-	defer func(window *sdl.Window) {
-		err := window.Destroy()
-		if err != nil {
-			//fmt.Println(err.Error())
-		}
-	}(window)
+	defer func() {
+		sdl.Do(func() {
+			window.Destroy()
+		})
+	}()
 
 	/*
 		Create Renderer
 	*/
-	renderer, err = sdl.CreateRenderer(window, -1, sdl.RENDERER_ACCELERATED)
+	sdl.Do(func() {
+		renderer, err = sdl.CreateRenderer(window, -1, sdl.RENDERER_ACCELERATED)
+	})
 	if err != nil {
 		panic(err.Error())
 	}
 
-	defer func(renderer *sdl.Renderer) {
-		err := renderer.Destroy()
-		if err != nil {
-			//fmt.Println(err.Error())
-		}
-	}(renderer)
+	defer func() {
+		sdl.Do(func() {
+			renderer.Destroy()
+		})
+	}()
 
 	initSnake()
 	initApples()
-
-	loadAppleImage()
-	defer func(appleTexture *sdl.Texture) {
-		err := appleTexture.Destroy()
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-	}(appleTexture)
+	sdl.Do(loadAppleImage)
+	defer func() {
+		sdl.Do(func() {
+			appleTexture.Destroy()
+		})
+	}()
 
 	snakeLen := make(chan int)
 	go draw(snakeLen)
@@ -145,12 +148,16 @@ func run() int {
 		default:
 
 		}
-		//sdl.Delay(delay)
+		// sdl.Delay(delay)
 	}
 
 	return 0
 }
 
 func main() {
-	os.Exit(run())
+	var exitcode int
+	sdl.Main(func() {
+		exitcode = run()
+	})
+	os.Exit(exitcode)
 }
