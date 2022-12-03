@@ -31,25 +31,24 @@ func areApplesOverlapping(x, y int32) bool {
 
 func renderApples(renderer *sdl.Renderer) {
 	for _, v := range apples {
-		err := renderer.SetDrawColor(48, 53, 48, 255)
-		if err != nil {
-			panic(err.Error())
+		if renderer.SetDrawColor(48, 53, 48, 255) != nil {
+			panic("Error in apple, in renderApples while calling setDrawColor")
 		}
-		err = renderer.FillRect(&sdl.Rect{
+		if renderer.FillRect(&sdl.Rect{
 			X: v.X,
 			Y: v.Y,
 			W: blockSize,
-			H: blockSize,
-		},
-		)
-		if err != nil {
-			return
+			H: blockSize},
+		) != nil {
+			panic("Error in apple, in renderApples while calling FillRect")
 		}
-		err = renderer.Copy(
+		if renderer.Copy(
 			appleTexture,
 			&sdl.Rect{W: blockSize, H: blockSize},
 			&sdl.Rect{X: v.X, Y: v.Y, W: blockSize + 5, H: blockSize + 5},
-		)
+		) != nil {
+			panic("Error in apple, in renderApples while calling Copy")
+		}
 	}
 }
 

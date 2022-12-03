@@ -49,7 +49,6 @@ func handleAppleHit() {
 }
 
 func renderSnake(renderer *sdl.Renderer) {
-
 	for i, v := range snake {
 		red := uint8(67)
 		green := uint8(198)
@@ -65,13 +64,11 @@ func renderSnake(renderer *sdl.Renderer) {
 		r.W = blockSize
 		r.H = blockSize
 
-		err := renderer.SetDrawColor(red, green, blue, 255)
-		if err != nil {
-			return
+		if renderer.SetDrawColor(red, green, blue, 255) != nil {
+			panic("Error in snake, in renderSnake while calling setDrawColor")
 		}
-		err = renderer.FillRect(r)
-		if err != nil {
-			return
+		if renderer.FillRect(r) != nil {
+			panic("Error in snake, in renderSnake while calling FillRect")
 		}
 	}
 }

@@ -15,13 +15,11 @@ func loadAppleImage() {
 	appleTexture, _ = renderer.CreateTextureFromSurface(image)
 }
 func clearRenderer() {
-	err := renderer.SetDrawColor(0, 0, 0, 255)
-	if err != nil {
-		panic(err.Error())
+	if renderer.SetDrawColor(0, 0, 0, 255) != nil {
+		panic("Error in main, in clearRenderer while calling setDrawColor")
 	}
-	err = renderer.Clear()
-	if err != nil {
-		panic(err.Error())
+	if renderer.Clear() != nil {
+		panic("Error in main, in clearRenderer while calling Clear")
 	}
 }
 
@@ -29,25 +27,17 @@ func clearRenderer() {
 drawBackground: draws the background image onto the screen
 */
 func drawBackground() {
-	err := renderer.SetDrawColor(48, 53, 48, 255)
-	if err != nil {
-		fmt.Println(err.Error())
-		return
+	if renderer.SetDrawColor(48, 53, 48, 255) != nil {
+		panic("Error in main, in drawBackground while calling setDrawColor")
 	}
-	err = renderer.FillRect(&sdl.Rect{
+	if renderer.FillRect(&sdl.Rect{
 		X: 0,
 		Y: 0,
 		W: windowSize,
 		H: windowSize},
-	)
-	if err != nil {
-		panic(err.Error())
+	) != nil {
+		panic("Error in main, in drawBackground while calling FillRect")
 	}
-	/*err = renderer.Copy(
-		backgroundTexture,
-		&sdl.Rect{W: 512, H: 512},
-		&sdl.Rect{W: 512, H: 512},
-	)*/
 }
 
 func draw(snakeLen chan int) {
@@ -88,9 +78,8 @@ func run() int {
 	}
 
 	defer func(window *sdl.Window) {
-		err := window.Destroy()
-		if err != nil {
-			//fmt.Println(err.Error())
+		if window.Destroy() != nil {
+			//panic("Error while destroying window")
 		}
 	}(window)
 
@@ -103,9 +92,8 @@ func run() int {
 	}
 
 	defer func(renderer *sdl.Renderer) {
-		err := renderer.Destroy()
-		if err != nil {
-			//fmt.Println(err.Error())
+		if renderer.Destroy() != nil {
+			panic("Error while destroying renderer")
 		}
 	}(renderer)
 
@@ -114,9 +102,8 @@ func run() int {
 
 	loadAppleImage()
 	defer func(appleTexture *sdl.Texture) {
-		err := appleTexture.Destroy()
-		if err != nil {
-			fmt.Println(err.Error())
+		if appleTexture.Destroy() != nil {
+			panic("Error while destroying apple texture")
 		}
 	}(appleTexture)
 
@@ -143,9 +130,8 @@ func run() int {
 				fmt.Sprintf("Go,Snake! Score: %d", t-snakeStartLength),
 			)
 		default:
-
+			continue
 		}
-		//sdl.Delay(delay)
 	}
 
 	return 0
