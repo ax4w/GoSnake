@@ -10,9 +10,15 @@ import (
 )
 
 func loadAppleImage() {
-	image, _ := img.Load(applePath)
+	image, err := img.Load(applePath)
+	if err != nil {
+		panic(err.Error())
+	}
 	defer image.Free()
-	appleTexture, _ = renderer.CreateTextureFromSurface(image)
+	appleTexture, err = renderer.CreateTextureFromSurface(image)
+	if err != nil {
+		panic(err.Error())
+	}
 }
 func clearRenderer() {
 	if renderer.SetDrawColor(0, 0, 0, 255) != nil {
